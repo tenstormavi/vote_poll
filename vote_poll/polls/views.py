@@ -1,9 +1,32 @@
-# Create your views here.
-from django.shortcuts import get_object_or_404, render_to_response
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.template import RequestContext
+from django.views import generic
+
 from polls.models import Choice, Poll
+
+
+class IndexView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Poll.objects.order_by('-pub_date')[:5]
+
+def home(request):
+    return render(request, 'polls/home.html')
+
+
+class DetailView(generic.DetailView):
+    model = Poll
+    template_name = 'polls/detail.html'
+
+
+class ResultsView(generic.DetailView):
+    model = Poll
+    template_name = 'polls/results.html'
+
 
 def vote(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id)
@@ -18,7 +41,4 @@ def vote(request, poll_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
         return HttpResponseRedirect(reverse('polls_results', args=(p.id,)))
