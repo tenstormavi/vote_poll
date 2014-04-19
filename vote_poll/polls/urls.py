@@ -1,21 +1,10 @@
-from django.conf.urls import patterns, include, url
-from django.views.generic import DetailView, ListView
-from polls.models import Poll
+from django.conf.urls import url
 
-urlpatterns = patterns('',
-    url(r'^$',
-        ListView.as_view(
-            queryset=Poll.objects.order_by('-pub_date')[:5],
-            context_object_name='latest_poll_list',
-            template_name='polls/index.html')),
-    url(r'^(?P<pk>\d+)/$',
-        DetailView.as_view(
-            model=Poll,
-            template_name='polls/detail.html')),
-    url(r'^(?P<pk>\d+)/results/$',
-        DetailView.as_view(
-            model=Poll,
-            template_name='polls/results.html'),
-        name='poll_results'),
-    url(r'^(?P<poll_id>\d+)/vote/$', 'polls.views.vote'),
-)
+from polls import views
+
+urlpatterns = [
+    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
+    url(r'^(?P<pk>[0-9]+)/results/$', views.ResultsView.as_view(), name='results'),
+    url(r'^(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
+]

@@ -1,6 +1,6 @@
 # Django settings for vote_poll project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -108,6 +108,7 @@ ROOT_URLCONF = 'vote_poll.urls'
 WSGI_APPLICATION = 'vote_poll.wsgi.application'
 
 TEMPLATE_DIRS = (
+    '/home/avinash/vote_poll/vote_poll/templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
